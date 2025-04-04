@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+.card {
+  @apply p-4 rounded bg-white shadow-lg w-full flex flex-col items-center;
+}
+
+button {
+  @apply transition duration-200 ease-in-out;
+}
+
+button:hover {
+  @apply bg-gray-300;
+}
+
+.edit-button {
+  @apply bg-[#3251D0] text-white px-3 py-1 rounded;
+}
+
+.edit-button:hover {
+  @apply bg-blue-400;
+}
+
+.delete-button {
+  @apply bg-red-600 text-white px-3 py-1 rounded;
+}
+
+.delete-button:hover {
+  @apply bg-red-400;
+}
