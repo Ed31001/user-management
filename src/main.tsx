@@ -1,17 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import './index.css'
 import Login from './pages/Login'
 import UserManagement from './pages/UserManagement'
 import NotFound from './pages/NotFound'
-import Home from './pages/Home'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />,
-    errorElement: <NotFound />,
+     path:"/",
+     element: <Navigate to="/login" replace />
   },
   {
     path: '/login',
@@ -20,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <UserManagement />,
+    element: <ProtectedRoute><UserManagement /></ProtectedRoute>,
     errorElement: <NotFound />,
   }
 ]);

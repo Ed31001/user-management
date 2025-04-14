@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../atoms/Button';
+import passwordIcon from '../../assets/password_icon.png'
 
 interface PasswordInputProps {
   value: string;
@@ -24,7 +25,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange }) => {
           type="button"
           onClick={() => setShowPassword(!showPassword)} 
         >
-          👁️
+          <img src={passwordIcon} className="w-4.5 h-3"/>
         </Button>
       </div>
     </div>
