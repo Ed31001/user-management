@@ -18,14 +18,14 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange }) => {
           type={showPassword ? 'text' : 'password'}
           value={value}
           onChange={onChange}
-          className="w-full px-4 py-2 border rounded-md pr-10 focus:outline-(--color-primary)"
+          className="input pr-10"
         />
         <Button
           variant="password"
           type="button"
-          onClick={() => setShowPassword(!showPassword)} 
+          onClick={() => setShowPassword(!showPassword)}
         >
-          <img src={passwordIcon} className="w-4.5 h-3"/>
+          <img src={passwordIcon} className="w-4.5 h-3" />
         </Button>
       </div>
     </div>

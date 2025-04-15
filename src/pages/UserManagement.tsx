@@ -15,7 +15,7 @@ const UserManagement = () => {
   return (
     <div className="min-h-screen w-full">
       <Navbar />
-      <div className="p-4 flex items-center gap-2 w-full max-w-md">
+      <div className="p-4 flex items-center gap-2 w-full max-w-sm">
         <Input
           type="text"
           placeholder="Search users..."

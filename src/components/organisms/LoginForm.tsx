@@ -30,16 +30,18 @@ const LoginForm: React.FC = () => {
 
     setLoading(true);
     try {
-      const res = await login(email, password);
-      const { accessToken, expiresIn } = res.result.data;
-      setAuth(accessToken, expiresIn);
-      navigate('/dashboard');
+        const response = await axios.post('/api/login', { email, password });
+        if(response.data.status == 200){
+          const res = await login(email, password);
+          const { accessToken, expiresIn } = res.result.data;
+          setAuth(accessToken, expiresIn);
+          navigate('/dashboard');
+       } else {
+        setError('Invalid credentials.');
+       }
     } catch (err: unknown) {
       console.log('Error caught in catch block:', err);
       if (axios.isAxiosError(err)) {
-        console.error('Login failed:', err.response?.data || err.message);
-        setError('Invalid credentials.');
-      } else {
         console.error('Unexpected error:', err);
         setError('An unexpected error occurred.');
       }
@@ -50,9 +52,8 @@ const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {console.log('Rendering error state:', error)}
       {error && (
-        <div className="text-red-600 text-sm text-center border border-red-600 bg-red-100 p-2">
+        <div className="error-message">
           {error}
         </div>
       )}
