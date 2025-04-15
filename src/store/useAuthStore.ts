@@ -14,7 +14,7 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       expiresIn: null,
       setAuth: (token, expiresIn) => set({ accessToken: token, expiresIn }),
-      logout: () => set({ accessToken: null, expiresIn: null }),
+      logout: () => set({ accessToken: null, expiresIn: null }), // Clear user data
     }),
     { name: 'auth-storage' }
   )

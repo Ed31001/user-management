@@ -2,9 +2,24 @@
 
 @theme {
   --color-primary: #3251D0;
-  --color-primary-dark: #263D9C
+  --color-primary-dark: #263D9C;
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+.dark {
+  --color-primary: #263D9C;
+  --bg-color: #1a202c;
+  --text-color: #ffffff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .card {
   @apply p-4 rounded bg-white shadow-lg w-full flex flex-col items-center;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }

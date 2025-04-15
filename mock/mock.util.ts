@@ -27,11 +27,14 @@ export const generateToken = ({ email, password, expiresIn }: GenerateTokenParam
 export const validateToken = (token?: string) => {
   try {
     if (!token) {
+      console.log('No token provided');
       return false;
     }
     const decoded = jwt.verify(token.replace('Bearer ', ''), 'secret');
+    console.log('Token is valid:', decoded);
     return !!decoded;
-  } catch {
+  } catch (err) {
+    console.log('Token validation failed:', err);
     return false;
   }
 };

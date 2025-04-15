@@ -1,8 +1,14 @@
 import { NavButtons } from '../molecules/NavButtons';
 
 export const Navbar = () => (
-  <nav className="bg-(--color-primary) text-white p-4 flex justify-between items-center w-full">
-    <h1 className="text-xl font-bold">User Management</h1>
+  <nav
+    className="p-4 flex justify-between items-center w-full"
+    style={{
+      backgroundColor: 'var(--color-primary)',
+      color: 'var(--text-color)',
+    }}
+  >
+    <h1 className="text-xl font-bold text-white">User Management</h1>
     <NavButtons />
   </nav>
 );
