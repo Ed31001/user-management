@@ -13,7 +13,6 @@
   --text-color: #ffffff;
 }
 
-/* Apply global styles */
 body {
   @apply bg-[var(--bg-color)] text-[var(--text-color)];
 }

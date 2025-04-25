@@ -17,7 +17,7 @@ const LoginForm: React.FC = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     if (!email || !password) {
       setError('Email and password are required');
       return;
@@ -36,14 +36,16 @@ const LoginForm: React.FC = () => {
           const { accessToken, expiresIn } = res.result.data;
           setAuth(accessToken, expiresIn);
           navigate('/dashboard');
-       } else {
-        setError('Invalid credentials.');
        }
     } catch (err: unknown) {
       console.log('Error caught in catch block:', err);
       if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setError('Invalid credentials.');
+        } else {
         console.error('Unexpected error:', err);
         setError('An unexpected error occurred.');
+        }
       }
     } finally {
       setLoading(false);

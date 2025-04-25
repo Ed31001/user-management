@@ -9,7 +9,7 @@ const UserManagement = () => {
   const [query, setQuery] = useState('');
 
   const handleSearch = () => {
-    setQuery(search.trim()); // Update the query when the search button is clicked
+    setQuery(search.trim());
   };
 
   return (

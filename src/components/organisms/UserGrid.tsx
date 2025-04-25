@@ -15,7 +15,7 @@ export const UserGrid = ({ search }: { search: string }) => {
         setLoading(true);
         const url = search
           ? `/api/users?search=${search}`
-          : `/api/users`; // Fetch all users if no search query
+          : `/api/users`;
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,

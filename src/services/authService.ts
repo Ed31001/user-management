@@ -8,7 +8,7 @@ export const login = async (email: string, password: string) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Login error:', error.response?.data || error.message);
-      throw error; // Re-throw the error to be caught in the LoginForm
+      throw error;
     }
     console.error('Unexpected error:', error);
     throw new Error('An unexpected error occurred');

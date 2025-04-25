@@ -11,10 +11,10 @@ export const NavButtons = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(); // Clear user data
-    setTheme('light'); // Explicitly set theme to light
-    document.documentElement.classList.remove('dark'); // Remove dark mode class
-    navigate('/login'); // Redirect to login page
+    logout();
+    setTheme('light');
+    document.documentElement.classList.remove('dark');
+    navigate('/login');
   };
 
   return (
