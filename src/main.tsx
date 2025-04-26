@@ -7,7 +7,10 @@ import Login from './pages/Login';
 import UserManagement from './pages/UserManagement';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
+import AddUser from './pages/AddUser'; // Import the new AddUser page
 import { useThemeStore } from './store/useThemeStore';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient(); // Initialize React Query client
 
@@ -37,6 +40,15 @@ const App = () => {
       ),
       errorElement: <NotFound />,
     },
+    {
+      path: '/dashboard/new', // Add the new route
+      element: (
+        <ProtectedRoute>
+          <AddUser />
+        </ProtectedRoute>
+      ),
+      errorElement: <NotFound />,
+    },
   ]);
 
   return <RouterProvider router={router} />;
@@ -45,6 +57,7 @@ const App = () => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
+      <ToastContainer />
       <App />
     </QueryClientProvider>
   </React.StrictMode>

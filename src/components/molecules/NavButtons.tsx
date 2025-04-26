@@ -17,9 +17,13 @@ export const NavButtons = () => {
     navigate('/login');
   };
 
+  const newUser = () => {
+    navigate('/dashboard/new'); // Navigate to the new user creation page
+  };
+
   return (
     <div className="space-x-3">
-      <Button>Create User</Button>
+      <Button variant="primary" onClick={newUser}>Create User</Button>
       <Button variant="logout" onClick={handleLogout}>
         Logout
       </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginInput from '../atoms/LoginInput';
 import PasswordInput from '../molecules/PasswordInput';
 import { Button } from '../atoms/Button';
@@ -14,7 +14,15 @@ const LoginForm: React.FC = () => {
 
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const accessToken = useAuthStore((state) => state.accessToken); // Get the access token from the store
   const { mutate } = useLogin();
+
+  // Redirect to /dashboard if access token exists
+  useEffect(() => {
+    if (accessToken) {
+      navigate('/dashboard');
+    }
+  }, [accessToken, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +41,7 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     mutate({ email, password }, {
       onSuccess: (data) => {
-       const { accessToken, expiresIn } = data.result.data;
+        const { accessToken, expiresIn } = data.result.data;
         setAuth(accessToken, expiresIn);
         navigate('/dashboard');
         console.log('Login successful:', data);
@@ -50,7 +58,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="error-message">{error}</div>} {}
+      {error && <div className="error-message">{error}</div>}
       <LoginInput
         label="Email"
         type="email"

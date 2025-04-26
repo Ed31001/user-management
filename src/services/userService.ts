@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/useAuthStore';
 
 export type User = {
   id: number;
@@ -29,3 +30,20 @@ export const getUsers = async (token: string, search: string = ''): Promise<User
   });
   return response.data;
 };
+
+export const createUser = async (user: Omit<User, 'id'>): Promise<User> => {
+    const token = useAuthStore.getState().accessToken; // Retrieve the token from the store
+    if (!token) {
+      throw new Error('No access token found');
+    }
+  
+    const response = await axios.post('/api/users', user, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        'Content-Type': 'application/json',
+      },
+      validateStatus: (status) => status >= 200 && status < 300, // Treat 2xx status codes as success
+    });
+  
+    return response.data.result.data.user; // Access the user object from the response
+  };
