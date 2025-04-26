@@ -1,43 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { UserCard } from '../molecules/UserCard';
-import { User } from '../molecules/UserCard';
 import { useAuthStore } from '../../store/useAuthStore';
+import { getUsers, User } from '../../services/userService';
 
 export const UserGrid = ({ search }: { search: string }) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const token = useAuthStore((state) => state.accessToken);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const url = search
-          ? `/api/users?search=${search}`
-          : `/api/users`;
-        const response = await fetch(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setUsers(data.result.data.users);
-        }
-      } catch (err) {
-        console.error('Error fetching users:', err);
-        setError('Failed to fetch users');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Use React Query to fetch users
+  const { data, isLoading, isError, error } = useQuery(
+    {
+      queryKey: ['users', search], // Query key includes the search term
+      queryFn: () => getUsers(token!, search), // Fetch function
+      enabled: !!token, // Only fetch if the token exists
+    }
+  );
 
-    fetchUsers();
-  }, [search, token]);
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div className="text-red-600">{(error as Error).message}</div>;
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
+  const users = data?.result?.data?.users || [];
 
   return (
     <div className="p-4">
@@ -45,7 +26,7 @@ export const UserGrid = ({ search }: { search: string }) => {
         <div className="no-results">No Results</div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-          {users.map((user) => (
+          {users.map((user: User) => (
             <UserCard key={user.id} user={user} />
           ))}
         </div>

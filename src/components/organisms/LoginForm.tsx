@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import LoginInput from '../atoms/LoginInput';
 import PasswordInput from '../molecules/PasswordInput';
 import { Button } from '../atoms/Button';
-import { login } from '../../services/authService';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useLogin } from '../../services/authService';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -15,51 +14,43 @@ const LoginForm: React.FC = () => {
 
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const { mutate } = useLogin();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!email || !password) {
       setError('Email and password are required');
       return;
     }
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address.');
+      setError('Please enter a valid email address');
       return;
     }
 
     setLoading(true);
-    try {
-        const response = await axios.post('/api/login', { email, password });
-        if(response.data.status == 200){
-          const res = await login(email, password);
-          const { accessToken, expiresIn } = res.result.data;
-          setAuth(accessToken, expiresIn);
-          navigate('/dashboard');
-       }
-    } catch (err: unknown) {
-      console.log('Error caught in catch block:', err);
-      if (axios.isAxiosError(err)) {
-        if (err.response?.status === 401) {
-          setError('Invalid credentials.');
-        } else {
-        console.error('Unexpected error:', err);
-        setError('An unexpected error occurred.');
-        }
-      }
-    } finally {
-      setLoading(false);
-    }
+    mutate({ email, password }, {
+      onSuccess: (data) => {
+       const { accessToken, expiresIn } = data.result.data;
+        setAuth(accessToken, expiresIn);
+        navigate('/dashboard');
+        console.log('Login successful:', data);
+      },
+      onError: (error) => {
+        console.error('Login failed:', error);
+        setError('Invalid credentials');
+      },
+      onSettled: () => {
+        setLoading(false);
+      },
+    });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
-
+      {error && <div className="error-message">{error}</div>} {}
       <LoginInput
         label="Email"
         type="email"
@@ -71,7 +62,7 @@ const LoginForm: React.FC = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="text-center">
-        <Button variant="login" type="submit" disabled={loading}>
+        <Button variant="login" type="submit" onClick={handleSubmit} disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </Button>
       </div>
