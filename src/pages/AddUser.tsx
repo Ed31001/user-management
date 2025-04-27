@@ -74,8 +74,8 @@ const AddUser = () => {
            {errors.dateOfBirth && <p className="text-red-600 text-sm">{errors.dateOfBirth.message}</p>}
          </div>
          <div>
-           <label className="block text-sm font-medium text-[var(--text-color)]">Status</label>
-           <select {...register('status')} className="input">
+           <label className="block text-sm font-medium  text-[var(--text-color)]">Status</label>
+           <select {...register('status')} className="input bg-[var(--bg-color)]">
              <option value="active">Active</option>
              <option value="locked">Locked</option>
            </select>

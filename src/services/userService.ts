@@ -47,3 +47,36 @@ export const createUser = async (user: Omit<User, 'id'>): Promise<User> => {
   
     return response.data.result.data.user; // Access the user object from the response
   };
+
+  export const updateUser = async (id: string, updatedUser: Omit<User, 'id'>): Promise<User> => {
+  const token = useAuthStore.getState().accessToken;
+  if (!token) {
+    throw new Error('No access token found');
+  }
+
+  const response = await axios.put(`/api/users/${id}`, updatedUser, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    validateStatus: (status) => status >= 200 && status < 300,
+  });
+
+  return response.data.result.data.user;
+};
+
+// New function to delete a user
+export const deleteUser = async (id: string): Promise<void> => {
+  const token = useAuthStore.getState().accessToken;
+  if (!token) {
+    throw new Error('No access token found');
+  }
+
+  await axios.delete(`/api/users/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    validateStatus: (status) => status >= 200 && status < 300,
+  });
+};

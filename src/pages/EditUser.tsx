@@ -8,6 +8,7 @@ import { Button } from '../components/atoms/Button';
 import { Input } from '../components/atoms/Input';
 import { User } from '../services/userService';
 import { Navbar } from '../components/organisms/Navbar';
+import { updateUser } from '../services/userService';
 import { useAuthStore } from '../store/useAuthStore';
 import axios from 'axios';
 
@@ -56,14 +57,7 @@ const EditUser = () => {
 
   const mutation = useMutation<User, Error, UserFormValues>({
     mutationFn: async (updatedUser) => {
-      const token = useAuthStore.getState().accessToken;
-      const response = await axios.put(`/api/users/${id}`, updatedUser, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      return response.data.result.data.user;
+      return updateUser(id!, updatedUser); // Use the new updateUser function
     },
     onSuccess: () => {
       toast.success('User updated successfully!');
@@ -115,7 +109,7 @@ const EditUser = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-[var(--text-color)]">Status</label>
-            <select {...register('status')} className="input">
+            <select {...register('status')} className="input bg-[var(--bg-color)]">
               <option value="active">Active</option>
               <option value="locked">Locked</option>
             </select>

@@ -29,6 +29,10 @@ body {
   @apply w-full px-4 py-2 border rounded-md focus:outline-[var(--color-primary)];
 }
 
+.new-user-form {
+  @apply bg-[var(--bg-color)] p-8 rounded shadow-md w-full max-w-md space-y-4;
+}
+
 .button-primary {
   @apply transition duration-200 ease-in-out bg-white text-[var(--color-primary)] px-4 py-2 rounded hover:bg-gray-300;
 }

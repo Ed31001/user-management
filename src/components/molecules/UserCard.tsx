@@ -4,9 +4,8 @@ import { Button } from '../atoms/Button';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmationModal } from './ConfirmationModal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '../../store/useAuthStore';
+import { deleteUser } from '../../services/userService';
 
 export type User = {
   id: number;
@@ -28,12 +27,7 @@ export const UserCard = ({ user }: { user: User }) => {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      const token = useAuthStore.getState().accessToken;
-      await axios.delete(`/api/users/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      return deleteUser(user.id.toString()); // Use the new deleteUser function
     },
     onSuccess: () => {
       toast.success('User deleted successfully!');
