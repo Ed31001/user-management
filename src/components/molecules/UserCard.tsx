@@ -1,5 +1,12 @@
+import { useState } from 'react';
 import { Avatar } from '../atoms/Avatar';
 import { Button } from '../atoms/Button';
+import { useNavigate } from 'react-router-dom';
+import { ConfirmationModal } from './ConfirmationModal';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useAuthStore } from '../../store/useAuthStore';
 
 export type User = {
   id: number;
@@ -11,7 +18,40 @@ export type User = {
 };
 
 export const UserCard = ({ user }: { user: User }) => {
+  const navigate = useNavigate(); // Hook for navigation
   const initials = `${user.firstName[0]}${user.lastName?.[0] || ''}`;
+  const handleEdit = () => {
+    navigate(`/dashboard/edit/${user.id}`); // Navigate to the edit page with the user's ID
+  };
+  const queryClient = useQueryClient();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      const token = useAuthStore.getState().accessToken;
+      await axios.delete(`/api/users/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    onSuccess: () => {
+      toast.success('User deleted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['users'] }); // Refresh the user list
+    },
+    onError: () => {
+      toast.error('Failed to delete user. Please try again.');
+    },
+  });
+
+  const handleDelete = () => {
+    setModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    setModalOpen(false);
+    deleteMutation.mutate();
+  };
   return (
     <div className="card"style={{
       backgroundColor: 'var(--bg-color)',
@@ -27,9 +67,15 @@ export const UserCard = ({ user }: { user: User }) => {
         </div>
       </div>
       <div className="mt-2 space-x-2 w-full text-right">
-        <Button variant="edit">Edit</Button>
-        <Button variant="delete">Delete</Button>
+        <Button variant="edit" onClick={handleEdit}>Edit</Button>
+        <Button variant="delete" onClick={handleDelete}>Delete</Button>
       </div>
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={confirmDelete}
+        message={`Are you sure you want to delete ${user.firstName} ${user.lastName || ''}?`}
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import UserManagement from './pages/UserManagement';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import AddUser from './pages/AddUser'; // Import the new AddUser page
+import EditUser from './pages/EditUser'; // Import the new EditUser page
 import { useThemeStore } from './store/useThemeStore';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,6 +46,15 @@ const App = () => {
       element: (
         <ProtectedRoute>
           <AddUser />
+        </ProtectedRoute>
+      ),
+      errorElement: <NotFound />,
+    },
+    {
+      path: '/dashboard/edit/:id', // Add the new route
+      element: (
+        <ProtectedRoute>
+          <EditUser />
         </ProtectedRoute>
       ),
       errorElement: <NotFound />,
